@@ -22,9 +22,10 @@ func NewCascadeStub(db *gorm.DB, elem interface{}) *CascadeStub {
 	return &CascadeStub{db: db, elemType: inputType}
 }
 
+// NewInstance 返回一个指向零值实例的指针
 func (stub *CascadeStub) NewInstance() interface{} {
 	// 创建一个新的零值实例
-	newInstance := reflect.New(stub.elemType).Elem().Interface()
+	newInstance := reflect.New(stub.elemType).Interface()
 
 	return newInstance
 }
@@ -43,8 +44,11 @@ func (stub *CascadeStub) FetchData() interface{} {
 }
 
 func (stub *CascadeStub) InsertNodeByPath(item models.Cascade, path ...string) {
-	parentID := stub.FindElemID(path)
-	insertNode(stub.db, &parentID, item)
+	if len(path) == 0 {
+		insertNode(stub.db, nil, item)
+	} else {
+		insertNode(stub.db, stub.FindElemID(path), item)
+	}
 }
 
 func (stub *CascadeStub) InsertNodeByID(item models.Cascade, parentID uint) {
@@ -53,47 +57,28 @@ func (stub *CascadeStub) InsertNodeByID(item models.Cascade, parentID uint) {
 
 func (stub *CascadeStub) UpdateNodeByPath(item models.Updatable, path ...string) {
 	target := stub.NewInstance()
-	updateNode(stub.db, stub.FindElemID(path), &target, item)
+	updateNode(stub.db, stub.FindElemID(path), target, item)
 }
 
 func (stub *CascadeStub) UpdateNodeByID(item *models.ListItem, elemID uint) {
 	target := stub.NewInstance()
-	updateNode(stub.db, elemID, &target, item)
+	updateNode(stub.db, &elemID, target, item)
 }
 
 func (stub *CascadeStub) DeleteNodeByID(elemID uint) {
 	target := stub.NewInstance()
 	children := stub.NewSlice()
-	deleteNode(stub.db, elemID, &target, children)
+	deleteNode(stub.db, &elemID, target, children)
 }
 
 func (stub *CascadeStub) DeleteNodeByPath(path ...string) {
 	elemID := stub.FindElemID(path)
 	target := stub.NewInstance()
 	children := stub.NewSlice()
-	deleteNode(stub.db, elemID, &target, children)
+	deleteNode(stub.db, elemID, target, children)
 }
 
-func (stub *CascadeStub) FindElemID(path []string) uint {
-	cur := stub.NewInstance()
-
-	//var elemID *uint
-	//
-	//result := stub.db.Where("title = ? AND parent_id IS NULL", path[0]).First(&cur)
-	//if result.Error != nil {
-	//	log.Fatalf("failed to find parent node: %v", result.Error)
-	//}
-	////TODO: 错误，强转失败
-	//elemID = cur.(models.Cascade).GetID()
-	//for _, title := range path[1:] {
-	//	//result := db.Where("title = ?", title).Where("parent_id = ?", elemID).First(&parent)
-	//	result := stub.db.Raw("SELECT * FROM list_items WHERE title = ? AND parent_id = ? Limit 1", title, *elemID).Scan(&cur)
-	//	if result.Error != nil {
-	//
-	//		log.Fatalf("failed to find parent node: %v", result.Error)
-	//	}
-	//	elemID = cur.(models.Cascade).GetID()
-	//}
-
-	return *findElemID(stub.db, &cur, path...)
+func (stub *CascadeStub) FindElemID(path []string) *uint {
+	target := stub.NewInstance()
+	return findElemID(stub.db, target, path...)
 }
