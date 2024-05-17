@@ -54,7 +54,7 @@ func (stub *CascadeStub) FetchData() (interface{}, *models.CustomError) {
 func (stub *CascadeStub) InsertNodeByPath(item models.BaseInfo, path ...string) *models.CustomError {
 	if len(path) == 0 {
 		// 如果路径为空，直接插入节点
-		return insertNode(stub.db, nil, item)
+		return insertNode(stub.db, 0, item)
 	} else {
 		// 否则，根据路径查找父节点并插入子节点
 		if id, err := stub.FindElemID(path); err != nil {
@@ -68,7 +68,7 @@ func (stub *CascadeStub) InsertNodeByPath(item models.BaseInfo, path ...string) 
 
 // InsertNodeByID 根据父节点 ID 插入节点
 func (stub *CascadeStub) InsertNodeByID(item models.BaseInfo, parentID uint) *models.CustomError {
-	return insertNode(stub.db, &parentID, item)
+	return insertNode(stub.db, parentID, item)
 }
 
 // UpdateNodeByPath 根据路径更新节点
@@ -88,7 +88,7 @@ func (stub *CascadeStub) UpdateNodeByID(item *models.ListItem, elemID uint) *mod
 	// 创建一个新的零值实例作为目标
 	target := stub.NewInstance()
 	// 更新节点
-	return updateNode(stub.db, &elemID, target, item)
+	return updateNode(stub.db, elemID, target, item)
 }
 
 // DeleteNodeByID 根据节点 ID 删除节点及其子节点
@@ -97,7 +97,7 @@ func (stub *CascadeStub) DeleteNodeByID(elemID uint) *models.CustomError {
 	target := stub.NewInstance()
 	children := stub.NewSlice()
 	// 删除节点及其子节点
-	return deleteNode(stub.db, &elemID, target, children)
+	return deleteNode(stub.db, elemID, target, children)
 }
 
 // DeleteNodeByPath 根据路径删除节点及其子节点
@@ -115,7 +115,7 @@ func (stub *CascadeStub) DeleteNodeByPath(path ...string) *models.CustomError {
 }
 
 // FindElemID 根据路径查找节点 ID
-func (stub *CascadeStub) FindElemID(path []string) (*uint, *models.CustomError) {
+func (stub *CascadeStub) FindElemID(path []string) (uint, *models.CustomError) {
 	// 创建一个新的零值实例作为目标
 	target := stub.NewInstance()
 	// 查找路径对应的节点 ID

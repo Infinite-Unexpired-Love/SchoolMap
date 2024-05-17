@@ -31,8 +31,8 @@ func updateStructFields(target interface{}, item interface{}) {
 }
 
 type BaseInfo interface {
-	SetParentID(*uint)
-	GetParentID() *uint
-	GetID() *uint
+	SetParentID(uint)
+	GetParentID() uint
+	GetID() uint
 	GetTitle() string
 }

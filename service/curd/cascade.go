@@ -19,22 +19,22 @@ func fetchData(db *gorm.DB, items interface{}) *models.CustomError {
 }
 
 // findElemID 根据路径查找节点 ID
-func findElemID(db *gorm.DB, target interface{}, path ...string) (*uint, *models.CustomError) {
-	var elemID *uint
+func findElemID(db *gorm.DB, target interface{}, path ...string) (uint, *models.CustomError) {
+	var elemID uint
 
 	// 查找根节点
 	result := db.Where("title = ? AND parent_id IS NULL", path[0]).First(target)
 	if result.Error != nil {
-		return nil, models.SQLError(fmt.Sprintf("failed to find parent node: %v", result.Error))
+		return 0, models.SQLError(fmt.Sprintf("failed to find parent node: %v", result.Error))
 	}
 	elemID = target.(models.BaseInfo).GetID()
 
 	// 遍历路径的每个部分查找对应的子节点
 	for _, title := range path[1:] {
 		// TODO: 适配其他数据库
-		result := db.Raw("SELECT * FROM list_items WHERE title = ? AND parent_id = ? Limit 1", title, *elemID).Scan(target)
+		result := db.Raw("SELECT * FROM list_items WHERE title = ? AND parent_id = ? Limit 1", title, elemID).Scan(target)
 		if result.Error != nil {
-			return nil, models.SQLError(fmt.Sprintf("failed to find parent node: %v", result.Error))
+			return 0, models.SQLError(fmt.Sprintf("failed to find parent node: %v", result.Error))
 		}
 		elemID = target.(models.BaseInfo).GetID()
 	}
@@ -42,13 +42,9 @@ func findElemID(db *gorm.DB, target interface{}, path ...string) (*uint, *models
 }
 
 // insertNode 插入新节点
-func insertNode(db *gorm.DB, parentID *uint, item models.BaseInfo) *models.CustomError {
+func insertNode(db *gorm.DB, parentID uint, item models.BaseInfo) *models.CustomError {
 	var count int64
-	if parentID != nil {
-		db.Model(item).Where("parent_id = ? AND title = ?", parentID, item.GetTitle()).Count(&count)
-	} else {
-		db.Model(item).Where("parent_id is NULL AND title = ?", item.GetTitle()).Count(&count)
-	}
+	db.Model(item).Where("parent_id = ? AND title = ?", parentID, item.GetTitle()).Count(&count)
 	if count > 0 {
 		return models.SQLError(fmt.Sprintf("duplicate title: %v under parentNode", item.GetTitle()))
 	}
@@ -63,9 +59,9 @@ func insertNode(db *gorm.DB, parentID *uint, item models.BaseInfo) *models.Custo
 }
 
 // updateNode 更新节点
-func updateNode(db *gorm.DB, elemID *uint, target interface{}, item models.Updatable) *models.CustomError {
+func updateNode(db *gorm.DB, elemID uint, target interface{}, item models.Updatable) *models.CustomError {
 	// 查找要更新的节点
-	result := db.Where("id = ?", *elemID).First(target)
+	result := db.Where("id = ?", elemID).First(target)
 	if result.Error != nil {
 		return models.SQLError(fmt.Sprintf("failed to find node: %v", result.Error))
 	}
@@ -81,14 +77,14 @@ func updateNode(db *gorm.DB, elemID *uint, target interface{}, item models.Updat
 }
 
 // deleteNode 递归删除节点及其子节点
-func deleteNode(db *gorm.DB, elemID *uint, target interface{}, children interface{}) *models.CustomError {
+func deleteNode(db *gorm.DB, elemID uint, target interface{}, children interface{}) *models.CustomError {
 	// 复制一个空白的children用来下一次递归调用
 	newChildren, err := utils.GetVoidSlice(children)
 	if err != nil {
 		return models.InvalidArgError(err.Error())
 	}
 	// 查找子节点
-	result := db.Where("parent_id = ?", *elemID).Find(&children)
+	result := db.Where("parent_id = ?", elemID).Find(&children)
 	if result.Error != nil {
 		return models.SQLError(fmt.Sprintf("failed to find children nodes: %v", result.Error))
 	}

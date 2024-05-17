@@ -34,7 +34,7 @@ func (stub *ListItemStub) FetchData() (*[]models.ListItem, error) {
 	itemMap := make(map[uint][]models.ListItem)
 	for _, item := range items {
 		parentID := item.ParentID
-		itemMap[*parentID] = append(itemMap[*parentID], item)
+		itemMap[parentID] = append(itemMap[parentID], item)
 	}
 
 	var rootItems []models.ListItem
