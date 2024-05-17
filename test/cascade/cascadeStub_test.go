@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-var ListItemStub *curd.CascadeStub
+var CascadeStub *curd.CascadeStub
 var db *gorm.DB
 var db2 *gorm.DB
 
@@ -22,7 +22,7 @@ func init() {
 	if db, err := initDB("gorm_test"); err != nil {
 		panic(err)
 	} else {
-		ListItemStub = curd.NewCascadeStub(db, models.ListItem{})
+		CascadeStub = curd.NewCascadeStub(db, models.ListItem{})
 	}
 	db2, _ = initDB("gorm_test")
 }
@@ -56,13 +56,13 @@ func initDB(database string) (*gorm.DB, error) {
 func TestCascadeStub(t *testing.T) {
 	// 插入测试数据
 	item1 := &models.ListItem{Title: "Root"}
-	ListItemStub.InsertNodeByPath(item1)
+	CascadeStub.InsertNodeByPath(item1)
 
 	item2 := &models.ListItem{Title: "Child 1"}
-	ListItemStub.InsertNodeByPath(item2, "Root")
+	CascadeStub.InsertNodeByPath(item2, "Root")
 
 	item3 := &models.ListItem{Title: "Child 2"}
-	ListItemStub.InsertNodeByPath(item3, "Root", "Child 1")
+	CascadeStub.InsertNodeByPath(item3, "Root", "Child 1")
 
 	// 验证插入
 	var items []models.ListItem
@@ -75,7 +75,7 @@ func TestCascadeStub(t *testing.T) {
 
 	// 更新测试数据
 	itemToUpdate := &models.ListItem{Desc: "Updated Description"}
-	ListItemStub.UpdateNodeByPath(itemToUpdate, "Root", "Child 1", "Child 2")
+	CascadeStub.UpdateNodeByPath(itemToUpdate, "Root", "Child 1", "Child 2")
 
 	var updatedItem models.ListItem
 	result = db2.Where("title = ?", "Child 2").First(&updatedItem)
@@ -83,7 +83,7 @@ func TestCascadeStub(t *testing.T) {
 	assert.Equal(t, "Updated Description", updatedItem.Desc)
 
 	// 删除测试数据
-	ListItemStub.DeleteNodeByPath("Root", "Child 1")
+	CascadeStub.DeleteNodeByPath("Root", "Child 1")
 
 	result = db2.Preload("Children.Children").Where("parent_id IS NULL").Find(&items)
 	assert.NoError(t, result.Error, "failed to fetch data after delete")
