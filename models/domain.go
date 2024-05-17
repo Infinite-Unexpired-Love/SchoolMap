@@ -30,8 +30,9 @@ func updateStructFields(target interface{}, item interface{}) {
 	}
 }
 
-type Cascade interface {
+type BaseInfo interface {
 	SetParentID(*uint)
 	GetParentID() *uint
 	GetID() *uint
+	GetTitle() string
 }

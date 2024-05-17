@@ -29,3 +29,7 @@ func (target *ListItem) GetParentID() *uint {
 func (target *ListItem) GetID() *uint {
 	return &target.ID
 }
+
+func (target *ListItem) GetTitle() string {
+	return target.Title
+}
