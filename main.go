@@ -8,15 +8,15 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
-	"reflect"
 )
 
 func main() {
-	insertData()
-	ptr, _ := service.ListItemClient.FetchData()
-	items := reflect.ValueOf(ptr).Elem().Interface()
-	listItems := items.([]models.ListItem)
-	println(string(utils.Marshal(listItems)))
+	//insertData()
+	data, err := service.ListItemClient.FetchData()
+	if err != nil {
+		panic(err)
+	}
+	println(string(utils.Marshal(*data)))
 }
 
 func insertData() {

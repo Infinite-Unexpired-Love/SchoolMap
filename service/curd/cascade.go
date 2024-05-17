@@ -9,24 +9,14 @@ import (
 	"fmt"
 )
 
-// fetchData 从数据库中获取数据并填充 items
+// fetchData 从数据库中获取所有item，不构造树形结构
 func fetchData(db *gorm.DB, items interface{}) *models.CustomError {
-	// 使用预加载获取所有根节点及其子节点
-	result := db.Preload("Children").Where("parent_id IS NULL").Find(items)
+	result := db.Find(items)
 	if result.Error != nil {
 		return models.SQLError(fmt.Sprintf("failed to fetch data: %v", result.Error))
 	}
 	return nil
 }
-
-// fetchData 从数据库中获取所有item，不构造树形结构
-//func fetchData(db *gorm.DB, items interface{}) *models.CustomError {
-//	result := db.Find(&items)
-//	if result.Error != nil {
-//		return models.SQLError(fmt.Sprintf("failed to fetch data: %v", result.Error))
-//	}
-//	return nil
-//}
 
 // findElemID 根据路径查找节点 ID
 func findElemID(db *gorm.DB, target interface{}, path ...string) (*uint, *models.CustomError) {

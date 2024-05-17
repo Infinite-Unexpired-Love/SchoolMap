@@ -13,13 +13,13 @@ import (
 	"log"
 )
 
-var ListItemClient *curd.CascadeStub
+var ListItemClient *curd.ListItemStub
 
 func init() {
 	if db, err := initDB("gorm_test"); err != nil {
 		panic(err)
 	} else {
-		ListItemClient = curd.NewCascadeStub(db, models.ListItem{})
+		ListItemClient = curd.NewListItemStub(db)
 	}
 
 }
