@@ -41,6 +41,11 @@ func (stub *ListItemStub) setChildrenIterative(root *models.ListItem, itemMap ma
 	}
 }
 
+// Init 插入ID为0的数据，满足外键约束
+func (stub *ListItemStub) Init() *models.CustomError {
+	return stub.s.Init(&models.ListItem{ID: 0})
+}
+
 // FetchData 返回树形结构数据
 func (stub *ListItemStub) FetchData() (*[]models.ListItem, *models.CustomError) {
 	pdata, err := stub.s.FetchData()
@@ -51,8 +56,13 @@ func (stub *ListItemStub) FetchData() (*[]models.ListItem, *models.CustomError) 
 	items := data.([]models.ListItem)
 
 	itemMap := make(map[uint][]models.ListItem)
+	var parentID uint
 	for _, item := range items {
-		parentID := item.ParentID
+		if item.ParentID == nil {
+			parentID = 0
+		} else {
+			parentID = *item.ParentID
+		}
 		itemMap[parentID] = append(itemMap[parentID], item)
 	}
 
@@ -65,47 +75,20 @@ func (stub *ListItemStub) FetchData() (*[]models.ListItem, *models.CustomError) 
 	return &rootItems, nil
 }
 
-// InsertData 插入构造好的数据并返回成功插入的节点数
-func (stub *ListItemStub) InsertData(data *[]models.ListItem) (uint, *models.CustomError) {
-	var insertedCount uint
-
-	// 队列用于BFS
-	queue := make([]*models.ListItem, len(*data))
-	for i := range *data {
-		queue[i] = &(*data)[i]
+// InsertData 插入构造好的数据，无法保证插入节点数量，不具备去重功能
+func (stub *ListItemStub) InsertData(data *[]models.ListItem) *models.CustomError {
+	result := stub.s.db.Create(data)
+	if result.Error != nil {
+		return models.SQLError("failed to insert data")
 	}
-
-	for len(queue) > 0 {
-		// 处理队列中的当前层次的所有节点
-		currentLevelSize := len(queue)
-		for i := 0; i < currentLevelSize; i++ {
-			current := queue[i]
-
-			// 插入当前节点
-			err := stub.InsertNodeByID(current, current.ParentID)
-			if err != nil {
-				return insertedCount, err
-			}
-			insertedCount++
-
-			// 将子节点加入队列
-			for j := range current.Children {
-				current.Children[j].ParentID = current.ID
-				queue = append(queue, &current.Children[j])
-			}
-		}
-		// 移除已经处理完的当前层次的节点
-		queue = queue[currentLevelSize:]
-	}
-
-	return insertedCount, nil
+	return nil
 }
 
 func (stub *ListItemStub) InsertNodeByPath(item *models.ListItem, path ...string) *models.CustomError {
 	return stub.s.InsertNodeByPath(item, path...)
 }
 
-func (stub *ListItemStub) InsertNodeByID(item *models.ListItem, parentID uint) *models.CustomError {
+func (stub *ListItemStub) InsertNodeByID(item *models.ListItem, parentID *uint) *models.CustomError {
 	return stub.s.InsertNodeByID(item, parentID)
 }
 
@@ -123,4 +106,8 @@ func (stub *ListItemStub) DeleteNodeByID(elemID uint) *models.CustomError {
 
 func (stub *ListItemStub) DeleteNodeByPath(path ...string) *models.CustomError {
 	return stub.s.DeleteNodeByPath(path...)
+}
+
+func (stub *ListItemStub) FindElemID(path ...string) (uint, *models.CustomError) {
+	return stub.s.FindElemID(path)
 }

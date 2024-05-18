@@ -17,6 +17,7 @@ func main() {
 		panic(err)
 	}
 	println(string(utils.Marshal(*data)))
+
 }
 
 func insertData() *models.CustomError {
@@ -128,9 +129,7 @@ func insertData() *models.CustomError {
 		},
 	}
 
-	count, err := service.ListItemClient.InsertData(&data)
-	println(count)
-	return err
+	return service.ListItemClient.InsertData(&data)
 }
 
 func ptrFloat64(f float64) *float64 {

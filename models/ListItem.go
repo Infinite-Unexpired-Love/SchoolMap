@@ -4,12 +4,12 @@ import "gorm.io/gorm"
 
 type ListItem struct {
 	ID        uint           `gorm:"primaryKey" json:"id"`
-	Title     string         `gorm:"type:varchar(255);uniqueIndex:idx_parent_id_title" json:"title"`
+	Title     string         `gorm:"type:varchar(255)" json:"title"`
 	Desc      string         `json:"desc"`
 	Contact   *string        `json:"contact,omitempty"`
 	Latitude  *float64       `json:"latitude,omitempty"`
 	Longitude *float64       `json:"longitude,omitempty"`
-	ParentID  uint           `json:"-"`
+	ParentID  *uint          `json:"-"`
 	Children  []ListItem     `gorm:"foreignKey:ParentID" json:"children,omitempty"`
 	DeleteAt  gorm.DeletedAt `gorm:"index" json:"-"`
 }
@@ -18,11 +18,11 @@ func (target *ListItem) Update(item interface{}) {
 	updateStructFields(target, item)
 }
 
-func (target *ListItem) SetParentID(parentID uint) {
+func (target *ListItem) SetParentID(parentID *uint) {
 	target.ParentID = parentID
 }
 
-func (target *ListItem) GetParentID() uint {
+func (target *ListItem) GetParentID() *uint {
 	return target.ParentID
 }
 
