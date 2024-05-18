@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type ListItem struct {
 	ID        uint           `gorm:"primaryKey" json:"id"`
-	Title     string         `json:"title"`
+	Title     string         `gorm:"type:varchar(255);uniqueIndex:idx_parent_id_title" json:"title"`
 	Desc      string         `json:"desc"`
 	Contact   *string        `json:"contact,omitempty"`
 	Latitude  *float64       `json:"latitude,omitempty"`

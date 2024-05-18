@@ -4,14 +4,14 @@ import (
 	"TGU-MAP/models"
 	"TGU-MAP/service"
 	"TGU-MAP/utils"
-	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"log"
+	"os"
 )
 
 func main() {
-	//insertData()
+	if err := insertData(); err != nil {
+		println(err.Error())
+		os.Exit(1)
+	}
 	data, err := service.ListItemClient.FetchData()
 	if err != nil {
 		panic(err)
@@ -19,12 +19,7 @@ func main() {
 	println(string(utils.Marshal(*data)))
 }
 
-func insertData() {
-	dsn := "root@tcp(127.0.0.1:3306)/gorm_test?charset=utf8mb4&parseTime=True&loc=Local"
-	Db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
-	_ = Db.AutoMigrate(&models.ListItem{})
-
+func insertData() *models.CustomError {
 	// 示例数据
 	data := []models.ListItem{
 		{
@@ -133,12 +128,9 @@ func insertData() {
 		},
 	}
 
-	result := Db.Create(&data)
-	if result.Error != nil {
-		log.Fatalf("failed to insert data: %v", result.Error)
-	} else {
-		fmt.Println("Data inserted successfully")
-	}
+	count, err := service.ListItemClient.InsertData(&data)
+	println(count)
+	return err
 }
 
 func ptrFloat64(f float64) *float64 {

@@ -39,7 +39,7 @@ func (stub *CascadeStub) NewSlice() interface{} {
 	return newSlice
 }
 
-// FetchData 获取数据并返回包含元素的切片
+// FetchData 获取数据并返回包含元素的切片,不进行树形结构化处理
 func (stub *CascadeStub) FetchData() (interface{}, *models.CustomError) {
 	// 创建一个新的切片实例
 	items := stub.NewSlice()
@@ -57,7 +57,7 @@ func (stub *CascadeStub) InsertNodeByPath(item models.BaseInfo, path ...string) 
 		return insertNode(stub.db, 0, item)
 	} else {
 		// 否则，根据路径查找父节点并插入子节点
-		if id, err := stub.FindElemID(path); err != nil {
+		if id, err := stub.findElemID(path); err != nil {
 			return err
 		} else {
 			return insertNode(stub.db, id, item)
@@ -76,7 +76,7 @@ func (stub *CascadeStub) UpdateNodeByPath(item models.Updatable, path ...string)
 	// 创建一个新的零值实例作为目标
 	target := stub.NewInstance()
 	// 更新节点
-	if id, err := stub.FindElemID(path); err != nil {
+	if id, err := stub.findElemID(path); err != nil {
 		return err
 	} else {
 		return updateNode(stub.db, id, target, item)
@@ -103,7 +103,7 @@ func (stub *CascadeStub) DeleteNodeByID(elemID uint) *models.CustomError {
 // DeleteNodeByPath 根据路径删除节点及其子节点
 func (stub *CascadeStub) DeleteNodeByPath(path ...string) *models.CustomError {
 	// 查找路径对应的节点 ID
-	elemID, err := stub.FindElemID(path)
+	elemID, err := stub.findElemID(path)
 	if err != nil {
 		return err
 	}
@@ -114,8 +114,8 @@ func (stub *CascadeStub) DeleteNodeByPath(path ...string) *models.CustomError {
 	return deleteNode(stub.db, elemID, target, children)
 }
 
-// FindElemID 根据路径查找节点 ID
-func (stub *CascadeStub) FindElemID(path []string) (uint, *models.CustomError) {
+// findElemID 根据路径查找节点 ID
+func (stub *CascadeStub) findElemID(path []string) (uint, *models.CustomError) {
 	// 创建一个新的零值实例作为目标
 	target := stub.NewInstance()
 	// 查找路径对应的节点 ID

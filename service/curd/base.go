@@ -43,11 +43,11 @@ func findElemID(db *gorm.DB, target interface{}, path ...string) (uint, *models.
 
 // insertNode 插入新节点
 func insertNode(db *gorm.DB, parentID uint, item models.BaseInfo) *models.CustomError {
-	var count int64
-	db.Model(item).Where("parent_id = ? AND title = ?", parentID, item.GetTitle()).Count(&count)
-	if count > 0 {
-		return models.SQLError(fmt.Sprintf("duplicate title: %v under parentNode", item.GetTitle()))
-	}
+	//var count int64
+	//db.Model(item).Where("parent_id = ? AND title = ?", parentID, item.GetTitle()).Count(&count)
+	//if count > 0 {
+	//	return models.SQLError(fmt.Sprintf("duplicate title: %v under parentNode", item.GetTitle()))
+	//}
 
 	item.SetParentID(parentID)
 	result := db.Create(item)
