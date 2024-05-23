@@ -2,7 +2,7 @@ package main
 
 import (
 	"TGU-MAP/models"
-	"TGU-MAP/service/curd"
+	"TGU-MAP/service/crud"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-var CascadeStub *curd.CascadeStub
+var CascadeStub *crud.CascadeStub
 var db *gorm.DB
 var db2 *gorm.DB
 
@@ -22,7 +22,7 @@ func init() {
 	if db, err := initDB("gorm_test"); err != nil {
 		panic(err)
 	} else {
-		CascadeStub = curd.NewCascadeStub(db, models.ListItem{})
+		CascadeStub = crud.NewCascadeStub(db, models.ListItem{})
 	}
 	db2, _ = initDB("gorm_test")
 }

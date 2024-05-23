@@ -1,0 +1,15 @@
+database:
+  host: "127.0.0.1"
+  port: 3306
+  name: "gorm_test"
+  user: "root"
+  password: ""
+
+web:
+  port: 6000
+
+redis:
+  host: "127.0.0.1"
+  port: "6379"
+  password: ""
+  db: 0 #使用默认数据库

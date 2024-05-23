@@ -1,4 +1,4 @@
-package curd
+package crud
 
 import (
 	"TGU-MAP/models"

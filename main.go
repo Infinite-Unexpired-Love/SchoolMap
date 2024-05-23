@@ -3,20 +3,13 @@ package main
 import (
 	"TGU-MAP/models"
 	"TGU-MAP/service"
-	"TGU-MAP/utils"
-	"os"
+	"TGU-MAP/web"
 )
 
 func main() {
-	if err := insertData(); err != nil {
-		println(err.Error())
-		os.Exit(1)
-	}
-	data, err := service.ListItemClient.FetchData()
-	if err != nil {
+	if err := web.StartServer(); err != nil {
 		panic(err)
 	}
-	println(string(utils.Marshal(*data)))
 
 }
 
