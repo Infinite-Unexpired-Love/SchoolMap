@@ -1,12 +1,14 @@
 database:
   host: "127.0.0.1"
   port: 3306
-  name: "gorm_test"
+  name: "your_database"
   user: "root"
   password: ""
 
 web:
-  port: 6000
+  port: 8083
+  cert: "path/to/your/cert"
+  key: "path/to/your/key"
 
 redis:
   host: "127.0.0.1"

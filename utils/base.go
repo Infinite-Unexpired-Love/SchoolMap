@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func GetVoidSlice(src interface{}) (interface{}, error) {
+func CopySliceVoidly(src interface{}) (interface{}, error) {
 	if reflect.TypeOf(src).Kind() != reflect.Slice {
 		return nil, errors.New("src must be a kind of slice")
 	}
@@ -13,6 +13,13 @@ func GetVoidSlice(src interface{}) (interface{}, error) {
 	return reflect.MakeSlice(elemType, 0, 0).Interface(), nil
 }
 
-func GetVoidInstance(src interface{}) (interface{}, error) {
-	return nil, nil
+func CopyInstanceVoidly(src interface{}) (interface{}, error) {
+	if reflect.TypeOf(src).Kind() == reflect.Slice {
+		return CopySliceVoidly(src)
+	} else if reflect.TypeOf(src).Kind() == reflect.Interface {
+		elemType := reflect.TypeOf(src)
+		return reflect.New(elemType).Elem(), nil
+	} else {
+		return nil, errors.New("src must be a kind of slice")
+	}
 }

@@ -1,17 +1,18 @@
-package crud
+package listItem
 
 import (
 	"TGU-MAP/models"
+	"TGU-MAP/service/crud"
 	"gorm.io/gorm"
 	"reflect"
 )
 
 type ListItemStub struct {
-	s *CascadeStub
+	s *crud.CascadeStub
 }
 
 func NewListItemStub(db *gorm.DB) *ListItemStub {
-	return &ListItemStub{s: NewCascadeStub(db, models.ListItem{})}
+	return &ListItemStub{s: crud.NewCascadeStub(db, models.ListItem{})}
 }
 
 func (stub *ListItemStub) setChildren(item *models.ListItem, itemMap map[uint][]models.ListItem) {
@@ -65,8 +66,8 @@ func (stub *ListItemStub) FetchData() (*[]models.ListItem, *models.CustomError) 
 		}
 		itemMap[parentID] = append(itemMap[parentID], item)
 	}
-
-	var rootItems []models.ListItem
+	//使用make初始化，当没有数据时返回空切片而不是nil
+	rootItems := make([]models.ListItem, 0)
 
 	for _, item := range itemMap[0] {
 		stub.setChildren(&item, itemMap)
@@ -77,7 +78,7 @@ func (stub *ListItemStub) FetchData() (*[]models.ListItem, *models.CustomError) 
 
 // InsertData 插入构造好的数据，无法保证插入节点数量，不具备去重功能
 func (stub *ListItemStub) InsertData(data *[]models.ListItem) *models.CustomError {
-	result := stub.s.db.Create(data)
+	result := stub.s.Db.Create(data)
 	if result.Error != nil {
 		return models.SQLError("failed to insert data")
 	}
@@ -110,4 +111,10 @@ func (stub *ListItemStub) DeleteNodeByPath(path ...string) *models.CustomError {
 
 func (stub *ListItemStub) FindElemID(path ...string) (uint, *models.CustomError) {
 	return stub.s.FindElemID(path)
+}
+
+func (stub *ListItemStub) FindNodeByID(elemID uint) (*models.ListItem, *models.CustomError) {
+	data, err := stub.s.FindElem("id = ?", elemID)
+	li := data.(*models.ListItem)
+	return li, err
 }

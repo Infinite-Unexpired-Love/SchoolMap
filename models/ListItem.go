@@ -1,17 +1,15 @@
 package models
 
-import "gorm.io/gorm"
-
 type ListItem struct {
-	ID        uint           `gorm:"primaryKey" json:"id"`
-	Title     string         `gorm:"type:varchar(255)" json:"title"`
-	Desc      string         `json:"desc"`
-	Contact   *string        `json:"contact,omitempty"`
-	Latitude  *float64       `json:"latitude,omitempty"`
-	Longitude *float64       `json:"longitude,omitempty"`
-	ParentID  *uint          `json:"-"`
-	Children  []ListItem     `gorm:"foreignKey:ParentID" json:"children,omitempty"`
-	DeleteAt  gorm.DeletedAt `gorm:"index" json:"-"`
+	ID        uint       `gorm:"primaryKey" json:"id"`
+	Title     string     `gorm:"type:varchar(100)" json:"title"`
+	Desc      string     `json:"desc"`
+	Contact   *string    `json:"contact,omitempty"`
+	Latitude  *float64   `json:"latitude,omitempty"`
+	Longitude *float64   `json:"longitude,omitempty"`
+	IconName  *string    `json:"iconName,omitempty"`
+	ParentID  *uint      `json:"-"`
+	Children  []ListItem `gorm:"foreignKey:ParentID" json:"children,omitempty"`
 }
 
 func (target *ListItem) Update(item interface{}) {

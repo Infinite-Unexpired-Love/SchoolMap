@@ -2,7 +2,11 @@ package service
 
 import (
 	"TGU-MAP/models"
-	"TGU-MAP/service/crud"
+	"TGU-MAP/service/aliasItem"
+	"TGU-MAP/service/feedback"
+	"TGU-MAP/service/listItem"
+	"TGU-MAP/service/noticeItem"
+	"TGU-MAP/service/user"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
@@ -14,45 +18,43 @@ import (
 	"time"
 )
 
-var ListItemClient *crud.ListItemStub
-var RDB *redis.Client
-var GlobalConfig Config
-
 func init() {
 	if err := loadConfig(); err != nil {
 		panic(err)
 	}
-	if db, err := initDB(); err != nil {
+	if err := initListItemDB(); err != nil {
 		panic(err)
-	} else {
-		ListItemClient = crud.NewListItemStub(db)
 	}
+	if err := initAliasItemDB(); err != nil {
+		panic(err)
+	}
+	if err := initNoticeItemDB(); err != nil {
+		panic(err)
+	}
+	if err := initFeedbackDB(); err != nil {
+		panic(err)
+	}
+	if err := initUserDB(); err != nil {
+		panic(err)
+	}
+	//admin := models.User{
+	//	Username:   "系统管理员",
+	//	Mobile:     "15079994355",
+	//	Password:   "wqiej21394heds2!",
+	//	Role:       2,
+	//	Expiration: nil,
+	//}
+	//err := UserClient.InsertNode(&admin)
+	//if err != nil {
+	//	panic(err)
+	//}
 	initRedis()
-}
-
-type Config struct {
-	Database struct {
-		Host     string
-		Port     int
-		Name     string
-		User     string
-		Password string
-	}
-	Web struct {
-		Port int
-	}
-	Redis struct {
-		Host     string
-		Port     int
-		Password string
-		Db       int
-	}
 }
 
 func loadConfig() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".") // 添加配置文件所在路径
+	viper.AddConfigPath(".") // 配置文件在工作目录下，即项目的根目录
 	if err := viper.ReadInConfig(); err != nil {
 		return err
 	}
@@ -63,13 +65,13 @@ func loadConfig() error {
 	return nil
 }
 
-func initDB() (*gorm.DB, error) {
+func getConnection() (*gorm.DB, error) {
 	newLogger := logger.New(
 		log.New(os.Stdout, " ", log.LstdFlags), // io writer
 		logger.Config{
 			SlowThreshold:        time.Second, // Slow SQL threshold
 			LogLevel:             logger.Info, // Log level
-			ParameterizedQueries: true,        // Don't include params in the SQL log
+			ParameterizedQueries: false,       // Don't include params in the SQL log
 			Colorful:             true,        // Disable color
 		},
 	)
@@ -87,19 +89,83 @@ func initDB() (*gorm.DB, error) {
 		log.Fatalf("failed to connect database: %v", err)
 		return nil, err
 	}
-
-	err = db.AutoMigrate(&models.ListItem{})
-	if err != nil {
-		log.Fatalf("failed to migrate database: %v", err)
-		return nil, err
-	}
 	return db, nil
+}
+
+func initListItemDB() error {
+	if db, err := getConnection(); err != nil {
+		return err
+	} else {
+		err = db.AutoMigrate(&models.ListItem{})
+		if err != nil {
+			log.Fatalf("failed to migrate database: %v", err)
+			return err
+		}
+		ListItemClient = listItem.NewListItemStub(db)
+		return nil
+	}
+}
+
+func initUserDB() error {
+	if db, err := getConnection(); err != nil {
+		return err
+	} else {
+		err = db.AutoMigrate(&models.User{})
+		if err != nil {
+			log.Fatalf("failed to migrate database: %v", err)
+			return err
+		}
+		UserClient = user.NewUserStub(db)
+		return nil
+	}
+}
+
+func initAliasItemDB() error {
+	if db, err := getConnection(); err != nil {
+		return err
+	} else {
+		err = db.AutoMigrate(&models.AliasItem{})
+		if err != nil {
+			log.Fatalf("failed to migrate database: %v", err)
+			return err
+		}
+		AliasItemClient = aliasItem.NewAliasItemStub(db)
+		return nil
+	}
+}
+
+func initNoticeItemDB() error {
+	if db, err := getConnection(); err != nil {
+		return err
+	} else {
+		err = db.AutoMigrate(&models.NoticeItem{})
+		if err != nil {
+			log.Fatalf("failed to migrate database: %v", err)
+			return err
+		}
+		NoticeItemClient = noticeItem.NewNoticeItemStub(db)
+		return nil
+	}
+}
+
+func initFeedbackDB() error {
+	if db, err := getConnection(); err != nil {
+		return err
+	} else {
+		err = db.AutoMigrate(&models.Feedback{})
+		if err != nil {
+			log.Fatalf("failed to migrate database: %v", err)
+			return err
+		}
+		FeedbackClient = feedback.NewFeedbackStub(db)
+		return nil
+	}
 }
 
 func initRedis() {
 	RDB = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // 请根据实际情况调整
-		Password: "",               // 没有密码则为空
-		DB:       0,                // 使用默认数据库
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0, // 使用默认数据库
 	})
 }
