@@ -10,11 +10,20 @@ import (
 
 func HandleLogin(c *gin.Context) {
 	var loginDetails struct {
-		Mobile   string `json:"mobile" binding:"required"`
-		Password string `json:"password" binding:"required"`
+		Mobile    string `json:"mobile" binding:"required"`
+		Password  string `json:"password" binding:"required"`
+		CaptchaID string `json:"captchaId" binding:"required"`
+		Captcha   string `json:"code" binding:"required,min=6,max=6"`
 	}
 	if err := c.ShouldBindJSON(&loginDetails); err != nil {
 		c.JSON(http.StatusBadRequest, handler.StatusBad("登录凭证错误", nil))
+		return
+	}
+
+	if !store.Verify(loginDetails.CaptchaID, loginDetails.Captcha, true) {
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"msg": "验证码错误",
+		})
 		return
 	}
 
