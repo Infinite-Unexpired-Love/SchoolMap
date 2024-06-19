@@ -13,7 +13,7 @@ func HandleLogin(c *gin.Context) {
 		Mobile    string `json:"mobile" binding:"required"`
 		Password  string `json:"password" binding:"required"`
 		CaptchaID string `json:"captchaId" binding:"required"`
-		Captcha   string `json:"code" binding:"required,min=6,max=6"`
+		Captcha   string `json:"captcha" binding:"required,min=6,max=6"`
 	}
 	if err := c.ShouldBindJSON(&loginDetails); err != nil {
 		c.JSON(http.StatusBadRequest, handler.StatusBad("登录凭证错误", nil))

@@ -72,16 +72,21 @@ func GinLogger() gin.HandlerFunc {
 		c.Next()
 
 		cost := time.Since(start)
-		utils.Info(path,
-			zap.Int("status", c.Writer.Status()),
-			zap.String("method", c.Request.Method),
-			zap.String("path", path),
-			zap.String("query", query),
-			zap.String("ip", c.ClientIP()),
-			zap.String("user-agent", c.Request.UserAgent()),
-			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
-			zap.Int("size", c.Writer.Size()),
-			zap.Duration("cost", cost),
+		log := utils.Infof
+		if c.Writer.Status() >= 400 && c.Writer.Status() < 500 {
+			log = utils.Warnf
+		} else if c.Writer.Status() >= 500 {
+			log = utils.Errorf
+		}
+
+		log("| %3d | %13v | %15s | %-7s %s %s | %s\n",
+			c.Writer.Status(),
+			cost,
+			c.ClientIP(),
+			c.Request.Method,
+			path,
+			query,
+			c.Errors.ByType(gin.ErrorTypePrivate).String(),
 		)
 	}
 }

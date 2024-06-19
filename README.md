@@ -65,13 +65,13 @@ POST /login
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|body|body|object| 否 |none|
-|» mobile|body|string| 是 |none|
-|» password|body|string| 是 |none|
-|» captchaId|body|string| 是 |none|
-|» captcha|body|string| 是 |与验证码ID相对应的验证码，验证成功后即删|
+| 名称        | 位置 | 类型   | 必选 | 说明                                     |
+| ----------- | ---- | ------ | ---- | ---------------------------------------- |
+| body        | body | object | 否   | none                                     |
+| » mobile    | body | string | 是   | none                                     |
+| » password  | body | string | 是   | none                                     |
+| » captchaId | body | string | 是   | none                                     |
+| » captcha   | body | string | 是   | 与验证码ID相对应的验证码，验证成功后即删 |
 
 > 返回示例
 
@@ -87,19 +87,19 @@ POST /login
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» token|string|true|none||none|
-|» username|string|true|none||none|
-|» mobile|string|true|none||none|
+| 名称       | 类型   | 必选 | 约束 | 中文名 | 说明 |
+| ---------- | ------ | ---- | ---- | ------ | ---- |
+| » token    | string | true | none |        | none |
+| » username | string | true | none |        | none |
+| » mobile   | string | true | none |        | none |
 
 ## GET 获取图形验证码
 
@@ -118,18 +118,18 @@ GET /ca
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» captchaId|string|true|none||none|
-|» picPath|string|true|none||base64编码|
+| 名称        | 类型   | 必选 | 约束 | 中文名 | 说明       |
+| ----------- | ------ | ---- | ---- | ------ | ---------- |
+| » captchaId | string | true | none |        | none       |
+| » picPath   | string | true | none |        | base64编码 |
 
 # 地标
 
@@ -145,6 +145,7 @@ GET /li/
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -152,18 +153,19 @@ GET /li/
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## POST 新建地标
 
@@ -188,17 +190,17 @@ POST /li/item/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
-|body|body|object| 否 |none|
-|» title|body|string| 是 |none|
-|» desc|body|string| 是 |none|
-|» contact|body|string| 否 |none|
-|» latitude|body|number| 否 |none|
-|» longitude|body|number| 否 |none|
-|» iconName|body|string| 否 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
+| body          | body   | object | 否   | none |
+| » title       | body   | string | 是   | none |
+| » desc        | body   | string | 是   | none |
+| » contact     | body   | string | 否   | none |
+| » latitude    | body   | number | 否   | none |
+| » longitude   | body   | number | 否   | none |
+| » iconName    | body   | string | 否   | none |
 
 > 返回示例
 
@@ -206,6 +208,7 @@ POST /li/item/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -213,18 +216,19 @@ POST /li/item/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## PUT 更新地标
 
@@ -248,17 +252,17 @@ PUT /li/item/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
-|body|body|object| 否 |none|
-|» title|body|string| 是 |none|
-|» desc|body|string| 是 |none|
-|» contact|body|string| 否 |none|
-|» latitude|body|number| 否 |none|
-|» longitude|body|number| 否 |none|
-|» iconName|body|string| 否 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
+| body          | body   | object | 否   | none |
+| » title       | body   | string | 是   | none |
+| » desc        | body   | string | 是   | none |
+| » contact     | body   | string | 否   | none |
+| » latitude    | body   | number | 否   | none |
+| » longitude   | body   | number | 否   | none |
+| » iconName    | body   | string | 否   | none |
 
 > 返回示例
 
@@ -266,6 +270,7 @@ PUT /li/item/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -273,18 +278,19 @@ PUT /li/item/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## DELETE 删除地标
 
@@ -295,10 +301,10 @@ DELETE /li/item/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
 
 > 返回示例
 
@@ -306,6 +312,7 @@ DELETE /li/item/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -313,18 +320,19 @@ DELETE /li/item/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 # 筛选（分类）
 
@@ -340,6 +348,7 @@ GET /al/
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -347,18 +356,19 @@ GET /al/
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## POST 新建筛选
 
@@ -382,13 +392,13 @@ POST /al/item
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|Authorization|header|string| 是 |none|
-|body|body|object| 否 |none|
-|» title|body|string| 是 |none|
-|» markers|body|[object]| 是 |none|
-|»» id|body|number| 是 |none|
+| 名称          | 位置   | 类型     | 必选 | 说明 |
+| ------------- | ------ | -------- | ---- | ---- |
+| Authorization | header | string   | 是   | none |
+| body          | body   | object   | 否   | none |
+| » title       | body   | string   | 是   | none |
+| » markers     | body   | [object] | 是   | none |
+| »» id         | body   | number   | 是   | none |
 
 > 返回示例
 
@@ -396,6 +406,7 @@ POST /al/item
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -403,18 +414,19 @@ POST /al/item
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## DELETE 删除筛选
 
@@ -425,10 +437,10 @@ DELETE /al/item/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
 
 > 返回示例
 
@@ -436,6 +448,7 @@ DELETE /al/item/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -443,18 +456,19 @@ DELETE /al/item/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 # 通知
 
@@ -470,6 +484,7 @@ GET /no/
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -477,18 +492,19 @@ GET /no/
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## POST 新建通知
 
@@ -508,12 +524,12 @@ POST /no/item
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|Authorization|header|string| 是 |none|
-|body|body|object| 否 |none|
-|» title|body|string| 是 |none|
-|» publishTime|body|string| 是 |格式为“2024-5-24”|
+| 名称          | 位置   | 类型   | 必选 | 说明              |
+| ------------- | ------ | ------ | ---- | ----------------- |
+| Authorization | header | string | 是   | none              |
+| body          | body   | object | 否   | none              |
+| » title       | body   | string | 是   | none              |
+| » publishTime | body   | string | 是   | 格式为“2024-5-24” |
 
 > 返回示例
 
@@ -521,6 +537,7 @@ POST /no/item
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -528,18 +545,19 @@ POST /no/item
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## PUT 更新通知
 
@@ -550,10 +568,10 @@ PUT /no/item/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
 
 > 返回示例
 
@@ -561,6 +579,7 @@ PUT /no/item/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -568,18 +587,19 @@ PUT /no/item/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## DELETE 删除通知
 
@@ -596,11 +616,11 @@ DELETE /no/iten/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
-|body|body|object| 否 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
+| body          | body   | object | 否   | none |
 
 > 返回示例
 
@@ -608,6 +628,7 @@ DELETE /no/iten/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -615,18 +636,19 @@ DELETE /no/iten/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 # 用户反馈
 
@@ -639,9 +661,9 @@ GET /fe/
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|Authorization|header|string| 是 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| Authorization | header | string | 是   | none |
 
 > 返回示例
 
@@ -649,6 +671,7 @@ GET /fe/
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -656,18 +679,19 @@ GET /fe/
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
 ## POST 新建反馈
 
@@ -689,14 +713,14 @@ POST /fe/item
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|body|body|object| 否 |none|
-|» title|body|string| 是 |none|
-|» category|body|integer| 是 |0为信息维护，1为反馈建议|
-|» contact|body|string| 否 |none|
-|» publishTime|body|string| 是 |格式：“2024-5-23”，默认为今天|
-|» detail|body|string| 是 |none|
+| 名称          | 位置 | 类型    | 必选 | 说明                          |
+| ------------- | ---- | ------- | ---- | ----------------------------- |
+| body          | body | object  | 否   | none                          |
+| » title       | body | string  | 是   | none                          |
+| » category    | body | integer | 是   | 0为信息维护，1为反馈建议      |
+| » contact     | body | string  | 否   | none                          |
+| » publishTime | body | string  | 是   | 格式：“2024-5-23”，默认为今天 |
+| » detail      | body | string  | 是   | none                          |
 
 > 返回示例
 
@@ -704,23 +728,25 @@ POST /fe/item
 
 ```json
 {
+  "code": 0,
   "msg": "string"
 }
 ```
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
 
 ## DELETE 删除feedback
 
@@ -731,10 +757,10 @@ DELETE /fe/item/{id}
 
 ### 请求参数
 
-|名称|位置|类型|必选|说明|
-|---|---|---|---|---|
-|id|path|string| 是 |none|
-|Authorization|header|string| 是 |none|
+| 名称          | 位置   | 类型   | 必选 | 说明 |
+| ------------- | ------ | ------ | ---- | ---- |
+| id            | path   | string | 是   | none |
+| Authorization | header | string | 是   | none |
 
 > 返回示例
 
@@ -742,6 +768,7 @@ DELETE /fe/item/{id}
 
 ```json
 {
+  "code": 0,
   "msg": "string",
   "data": "string"
 }
@@ -749,16 +776,17 @@ DELETE /fe/item/{id}
 
 ### 返回结果
 
-|状态码|状态码含义|说明|数据模型|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+| 状态码 | 状态码含义                                              | 说明 | 数据模型 |
+| ------ | ------------------------------------------------------- | ---- | -------- |
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | 成功 | Inline   |
 
 ### 返回数据结构
 
 状态码 **200**
 
-|名称|类型|必选|约束|中文名|说明|
-|---|---|---|---|---|---|
-|» msg|string|true|none||none|
-|» data|string|true|none||none|
+| 名称   | 类型    | 必选 | 约束 | 中文名 | 说明 |
+| ------ | ------- | ---- | ---- | ------ | ---- |
+| » code | integer | true | none |        | none |
+| » msg  | string  | true | none |        | none |
+| » data | string  | true | none |        | none |
 
